@@ -1,7 +1,7 @@
-class GeodesicArc {
+class HyperbolicGeodesicArc {
   float cx, cy, r, startAngle, endAngle;
 
-  public GeodesicArc(float cx, float cy, float r, float startAngle, float endAngle) {
+  public HyperbolicGeodesicArc(float cx, float cy, float r, float startAngle, float endAngle) {
     this.cx = cx;
     this.cy = cy;
     this.r = r;
@@ -10,7 +10,7 @@ class GeodesicArc {
   }
 }
 
-GeodesicArc getGeodesicSegmentThrough(float u1, float u2, float v1, float v2) {
+HyperbolicGeodesicArc getGeodesicSegmentThrough(float u1, float u2, float v1, float v2) {
   float cx = (-0.5) * ((u2 * (v1 * v1 + v2 * v2 + 1) - v2 * (u1 * u1 + u2 * u2 + 1)) / (u1 * v2 - u2 * v1));
   float cy = (-0.5) * ((v1 * (u1 * u1 + u2 * u2 + 1) - u1 * (v1 * v1 + v2 * v2 + 1)) / (u1 * v2 - u2 * v1));
 
@@ -28,5 +28,5 @@ GeodesicArc getGeodesicSegmentThrough(float u1, float u2, float v1, float v2) {
     startAngle = temp - 2*PI;
   }
 
-  return new GeodesicArc(cx, cy, r, startAngle, endAngle);
+  return new HyperbolicGeodesicArc(cx, cy, r, startAngle, endAngle);
 }
