@@ -1,5 +1,3 @@
-float SCALING_FACTOR = 100;
-
 void setup() {
   size(800, 800);
   background(205);
@@ -22,44 +20,10 @@ void draw() {
 }
 
 void lineH(float u1, float u2, float v1, float v2) {
-  float cx = (-0.5) * ((u2 * (v1 * v1 + v2 * v2 + 1) - v2 * (u1 * u1 + u2 * u2 + 1)) / (u1 * v2 - u2 * v1));
-  float cy = (-0.5) * ((v1 * (u1 * u1 + u2 * u2 + 1) - u1 * (v1 * v1 + v2 * v2 + 1)) / (u1 * v2 - u2 * v1));
+  GeodesicArc garc = getGeodesicSegmentThrough(u1, u2, v1, v2);
   
-  float r =  sqrt(cx * cx + cy * cy - 1);
-
-  float angle1 = getAngle((u2-cy), (u1-cx));
-  float angle2 = getAngle((v2-cy), (v1-cx));
-
-  noStroke();
-  fill(205, 0, 0);
-
   stroke(0);
   strokeWeight(2);
-  mArc(cx, cy, r, angle1, angle2);
+  mArc(garc.cx, garc.cy, garc.r, garc.startAngle, garc.endAngle);
 }
 
-void mCircle(float cx, float cy, float r) {
-  circle(cx*SCALING_FACTOR, cy*SCALING_FACTOR, 2*r*SCALING_FACTOR);
-}
-
-void mArc(float cx, float cy, float r, float angle1, float angle2) {
-  noFill();
-  
-  float startAngle = min(angle1, angle2);
-  float endAngle = max(angle1, angle2);
-  
-  if((endAngle - startAngle) > PI) {
-    float temp = endAngle;
-    endAngle = startAngle;
-    startAngle = temp - 2*PI;
-  }
-  
-  arc(cx*SCALING_FACTOR, cy*SCALING_FACTOR, 2*r*SCALING_FACTOR, 2*r*SCALING_FACTOR, startAngle, endAngle);
-}
-
-float getAngle(float y, float x) {
-  float angle = atan(y / x);
-  if (x < 0) return angle + PI;
-  if (y < 0) return angle + 2*PI;
-  return angle;
-}
