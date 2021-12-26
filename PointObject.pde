@@ -16,14 +16,16 @@ class PointObject {
     float u2 = origPos.y; float v2 = pos.y;
 
     HyperbolicGeodesicArc hgArc = getGeodesicSegmentThrough(u1, u2, v1, v2);
-    
-    stroke(0);
-    strokeWeight(2);
-    mArc(hgArc.cx, hgArc.cy, hgArc.r, hgArc.startAngle, hgArc.endAngle);
 
     float velMag = vel.mag();
     PVector dir = PVector.fromAngle(getAngle(hgArc.cx - pos.x, pos.y - hgArc.cy));
     vel.set(PVector.mult(dir, velMag));
+  }
+
+  public void draw() {
+    noStroke();
+    fill(0);
+    mCircle(pos.x, pos.y, 0.02);
   }
 
 }
