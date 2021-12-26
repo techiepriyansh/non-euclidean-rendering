@@ -1,0 +1,19 @@
+class PointObject {
+  public static final float dx = 0.01;
+  public static final float dy = 0.01;
+
+  PVector pos, vel;
+
+  public PointObject(PVector pos, PVector vel) {
+    this.pos = pos;
+    this.vel = vel;
+  }
+
+  public void update() {
+    float u1 = pos.x;
+    float u2 = pos.y;
+
+    float v1 = u1 + dx;
+    float v2 = u2 + dy;
+  }
+}

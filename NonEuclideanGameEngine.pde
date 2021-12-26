@@ -1,7 +1,12 @@
+PointObject pobj;
+
 void setup() {
   size(800, 800);
   background(205);
+  frameRate(20);
+  pobj = new PointObject(new PVector(0.01, 0.5), new PVector(1, 1));
 }
+
 void draw() {
   // move origin to center
   translate(width/2, height/2);
@@ -16,5 +21,5 @@ void draw() {
   line(0, height/2, 0, -height/2);
   line(width/2, 0, -width/2, 0);
 
-  lineH(-0.5, 0.5, 0.5, 0.5);
+  pobj.update();
 }
