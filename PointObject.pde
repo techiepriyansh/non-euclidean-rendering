@@ -1,5 +1,5 @@
 class PointObject {
-  public static final float dt = 0.01;
+  public static final float dt = 0.001;
 
   PVector pos, vel;
 
