@@ -1,5 +1,4 @@
-int[] count = new int[5];
-int itr = 2;
+int count = 1;
 
 PointObject pobj1;
 PointObject pobj2;
@@ -24,16 +23,16 @@ void setup() {
   line(width/2, 0, -width/2, 0);
   
   
-  point4 points = new point4();
+  point7 points = new point7();
   float scale = 0.5;
-  for(int i=0;i<4;i++){
-    points.x[i] = scale * sin(2 * i * PI / 4 + PI/4);
-    points.y[i] = scale * cos(2 * i * PI / 4 + PI/4);
+  for(int i=0;i<7;i++){
+    points.x[i] = scale * cos(2 * i * PI / 7 + PI/2);
+    points.y[i] = scale * sin(2 * i * PI / 7 + PI/2);
   }
   stroke(0);
-  point4 temp = points;
-  square sq = new square(points.x,points.y);
-  sq.draw();
+  point7 temp = points;
+  Heptagon hept = new Heptagon(points.x,points.y);
+  hept.draw();
   
     
   
@@ -47,21 +46,108 @@ void setup() {
   //drawChild3(center1,center2,temp,count);
   
   stroke(255,0,0);
-  for(int i=0;i<5;i++){
-    count[i]=itr;
-  }
-  //drawChild(temp,count);
-  
-  
+  drawChildHept(temp,count);
 }
 
 void draw() {
    
 }
 
-void drawChild(point4 temp, int[] count){
+
+void drawChildHept(point7 temp, int count){
+  if(count == 0) return;
+  for(int i=0;i<1;i++){
+    point7 newPoints = new point7();
+    PVector tran = new PVector();
+    PVector center = center(temp.x[i],temp.y[i],temp.x[(i+6)%7],temp.y[(i+6)%7]);
+     // 6' <-- 0
+    newPoints.x[(i+6)%7] = temp.x[(i)%7];
+    newPoints.y[(i+6)%7] = temp.y[(i)%7];
+    
+    // 0' <-- 6
+    newPoints.x[(i)%7] = temp.x[(i+6)%7];
+    newPoints.y[(i)%7] = temp.y[(i+6)%7];
+        
+    // 5' <-- inv(1)
+    tran = inverse(center, temp.x[(i+1)%7], temp.y[(i+1)%7], center.z);
+    newPoints.x[(i+5)%7] = tran.x;
+    newPoints.y[(i+5)%7] = tran.y;
+    
+    // 4' <-- inv(2)
+    tran = inverse(center, temp.x[(i+2)%7], temp.y[(i+2)%7], center.z);
+    newPoints.x[(i+4)%7] = tran.x;
+    newPoints.y[(i+4)%7] = tran.y;
+
+    // 3' <-- inv(3)
+    tran = inverse(center, temp.x[(i+3)%7], temp.y[(i+3)%7], center.z);
+    newPoints.x[(i+3)%7] = tran.x;
+    newPoints.y[(i+3)%7] = tran.y;
+
+    // 2' <-- inv(4)
+    tran = inverse(center, temp.x[(i+4)%7], temp.y[(i+4)%7], center.z);
+    newPoints.x[(i+2)%7] = tran.x;
+    newPoints.y[(i+2)%7] = tran.y;
+
+    // 1' <-- inv(5)
+    tran = inverse(center, temp.x[(i+5)%7], temp.y[(i+5)%7], center.z);
+    newPoints.x[(i+5)%7] = tran.x;
+    newPoints.y[(i+5)%7] = tran.y;
+    
+    
+    Pentagon pent = new Pentagon(newPoints.x,newPoints.y);
+    pent.draw();
+   
+    //count=1;
+    int t=count;
+    count--;
+    drawChildHept(newPoints, count);
+    count = t;
+  }
+}
+
+void drawChildPent(point5 temp, int count){
+    if(count == 0) return;
+  for(int i=0;i<5;i++){
+    point5 newPoints = new point5();
+    PVector tran = new PVector();
+    PVector center = center(temp.x[i],temp.y[i],temp.x[(i+4)%5],temp.y[(i+4)%5]);
+     // 1' <-- 0
+    newPoints.x[(i+1)%5] = temp.x[(i)%5];
+    newPoints.y[(i+1)%5] = temp.y[(i)%5];
+    
+    // 2' <-- 4
+    newPoints.x[(i+2)%5] = temp.x[(i+4)%5];
+    newPoints.y[(i+2)%5] = temp.y[(i+4)%5];
+        
+    // 4' <-- inv(2)
+    tran = inverse(center, temp.x[(i+2)%5], temp.y[(i+2)%5], center.z);
+    newPoints.x[(i+4)%5] = tran.x;
+    newPoints.y[(i+4)%5] = tran.y;
+    
+    // 1' <-- inv(1)
+    tran = inverse(center, temp.x[(i+1)%5], temp.y[(i+1)%5], center.z);
+    newPoints.x[(i)%5] = tran.x;
+    newPoints.y[(i)%5] = tran.y;
+
+    // 3' <-- inv(3)
+    tran = inverse(center, temp.x[(i+3)%5], temp.y[(i+3)%5], center.z);
+    newPoints.x[(i+3)%5] = tran.x;
+    newPoints.y[(i+3)%5] = tran.y;
+    
+    
+    Pentagon pent = new Pentagon(newPoints.x,newPoints.y);
+    pent.draw();
+   
+    //count=1;
+    int t=count;
+    count--;
+    drawChildPent(newPoints, count);
+    count = t;
+  }
+}
+void drawChildSquare(point4 temp, int count){
   
-  if(count[0] == 0) return;
+  if(count == 0) return;
   for(int i=0;i<4;i++){
     point4 newPoints = new point4();
     PVector tran = new PVector();
@@ -71,7 +157,7 @@ void drawChild(point4 temp, int[] count){
     newPoints.y[(i+3)%4] = temp.y[(i)%4];
     
     // 2' <-- 1
-    newPoints.x[(i+2)%4] = temp.x[(i+1)%5];
+    newPoints.x[(i+2)%4] = temp.x[(i+1)%4];
     newPoints.y[(i+2)%4] = temp.y[(i+1)%4];
         
     // 0' <-- inv(3)
@@ -89,133 +175,10 @@ void drawChild(point4 temp, int[] count){
     sq.draw();
    
     //count=1;
-    //count[i]--;
-    //drawChild(newPoints, count);
+    int t=count;
+    count--;
+    drawChildSquare(newPoints, count);
+    count = t;
     
   }
 }
-
-//void drawChildLeft(PVector center1,PVector center2, point5 temp,int count){
-//    if(count == 0 ) return;
-//    point5 newPoints = new point5();
-//    PVector tran = new PVector();
-    
-//    // 1 <-- 0
-//    newPoints.x[1] = temp.x[0];
-//    newPoints.y[1] = temp.y[0];
-    
-//    // 2 <-- 4
-//    newPoints.x[2] = temp.x[4];
-//    newPoints.y[2] = temp.y[4];
-        
-//    // 0 <-- inv(1)
-//    tran = inverse(center1, temp.x[1], temp.y[1], center1.z);
-//    newPoints.x[0] = tran.x;
-//    newPoints.y[0] = tran.y;
-    
-//    // 4 <-- inv(2)
-//    tran = inverse(center1, temp.x[2], temp.y[2], center1.z);
-//    newPoints.x[4] = tran.x;
-//    newPoints.y[4] = tran.y;
-    
-//    // 3 <-- inv(3)
-//    tran = inverse(center1, temp.x[3], temp.y[3], center1.z);
-//    newPoints.x[3] = tran.x;
-//    newPoints.y[3] = tran.y;
-    
-//    Pentagon pentNew1 = new Pentagon(newPoints.x,newPoints.y);
-//    pentNew1.draw();
-    
-    
-//    temp = newPoints;
-//    center1 = center(temp.x[0],temp.y[0],temp.x[4],temp.y[4]);
-//    center2 = center(temp.x[4],temp.y[4],temp.x[3],temp.y[3]);
-//    count--;
-    
-//    int t = count;
-//    drawChildLeft(center1,center2,temp,count);
-//    count = t;
-//    drawChildRight(center1,center2,temp,count);
-//}
-
-//void drawChildRight(PVector center1,PVector center2, point5 temp,int count){
-//    if(count == 0 ) return;
-//    point5 newPoints = new point5();
-//    PVector tran = new PVector();
-//    // 1 <-- 4
-//    newPoints.x[1] = temp.x[4];
-//    newPoints.y[1] = temp.y[4];
-    
-//    // 2 <-- 3
-//    newPoints.x[2] = temp.x[3];
-//    newPoints.y[2] = temp.y[3];
-        
-//    // 0 <-- inv(0)
-//    tran = inverse(center2, temp.x[0], temp.y[0], center2.z);
-//    newPoints.x[0] = tran.x;
-//    newPoints.y[0] = tran.y;
-    
-//    // 4 <-- inv(1)
-//    tran = inverse(center2, temp.x[1], temp.y[1], center2.z);
-//    newPoints.x[4] = tran.x;
-//    newPoints.y[4] = tran.y;
-    
-//    // 3 <-- inv(2)
-//    tran = inverse(center2, temp.x[2], temp.y[2], center2.z);
-//    newPoints.x[3] = tran.x;
-//    newPoints.y[3] = tran.y;
-    
-//    Pentagon pentNew2 = new Pentagon(newPoints.x,newPoints.y);
-//    pentNew2.draw();
-    
-//    temp = newPoints;
-//    center1 = center(temp.x[0],temp.y[0],temp.x[4],temp.y[4]);
-//    center2 = center(temp.x[4],temp.y[4],temp.x[3],temp.y[3]);
-//    count--;
-//    int t = count;
-//    drawChildLeft(center1,center2,temp,count);
-//    count = t;
-//    drawChildRight(center1,center2,temp,count);
-//}
-
-//void drawChild1(PVector center1,PVector center2, point5 temp,int count){
-//    if(count == 0 ) return;
-//    point5 newPoints = new point5();
-//    PVector tran = new PVector();
-    
-    
-//    // 1 <-- 4
-//    newPoints.x[1] = temp.x[4];
-//    newPoints.y[1] = temp.y[4];
-    
-//    // 0 <-- 0
-//    newPoints.x[0] = temp.x[0];
-//    newPoints.y[0] = temp.y[0];
-        
-//    // 1 <-- inv(4)
-//    tran = inverse(center2, temp.x[4], temp.y[4], center2.z);
-//    newPoints.x[1] = tran.x;
-//    newPoints.y[1] = tran.y;
-//  4
-//    // 3 <-- inv(2)
-//    tran = inverse(center2, temp.x[2], temp.y[2], center2.z);
-//    newPoints.x[3] = tran.x;
-//    newPoints.y[3] = tran.y;
-    
-//    // 2 <-- inv(3)
-//    tran = inverse(center2, temp.x[3], temp.y[3], center2.z);
-//    newPoints.x[2] = tran.x;
-//    newPoints.y[2] = tran.y;
-    
-//    Pentagon pentNew2 = new Pentagon(newPoints.x,newPoints.y);
-//    pentNew2.draw();
-    
-//    temp = newPoints;
-//    center1 = center(temp.x[0],temp.y[0],temp.x[4],temp.y[4]);
-//    center2 = center(temp.x[4],temp.y[4],temp.x[3],temp.y[3]);
-//    count--;
-//    int t = count;
-//    drawChildLeft(center1,center2,temp,count);
-//    count = t;
-//    drawChildRight(center1,center2,temp,count);
-//}
