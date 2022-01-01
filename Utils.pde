@@ -29,9 +29,9 @@ float getAngle(float y, float x) {
 }
 
 // important class
-class point5{
-  public float[] x = new float[5];
-  public float[] y = new float[5];
+class point4{
+  public float[] x = new float[4];
+  public float[] y = new float[4];
 }
 
 
