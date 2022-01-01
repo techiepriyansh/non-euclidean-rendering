@@ -1,6 +1,6 @@
-int count = 1;
+int count = 5;
 float time = 0;
-float weight = 0.0;
+float weight = 0.01;
 
 PointObject pobj1;
 PointObject pobj2;
@@ -29,31 +29,22 @@ void draw() {
   line(width/2, 0, -width/2, 0);
   
   
-  point3 points = new point3();
   float scale = 0.5;
-  for(int i=0;i<3;i++){
-    points.x[i] = scale * cos(2 * i * PI / 7 + PI/2 + time*weight);
-    points.y[i] = scale * sin(2 * i * PI / 7 + PI/2 + time*weight);
+  for(int j=0;j<7;j++){
+    point3 points = new point3();
+    for(int i=0;i<2;i++){
+      points.x[i] = scale * cos(2*(i+j) * PI / 7 + PI/2 + time*weight);
+      points.y[i] = scale * sin(2*(i+j) * PI / 7 + PI/2 + time*weight);
+    }
+    points.x[2]=0.001;points.y[2]=0.001;
+    stroke(255,238,3);
+    point3 temp = points;
+    Triangle tri= new Triangle(points.x,points.y);
+    tri.draw();
+
+    drawChildTriangle(temp,count);
+    time++;
   }
-  stroke(0);
-  point3 temp = points;
-  Triangle tri= new Triangle(points.x,points.y);
-  tri.draw();
-  
-    
-  
-  //drawing the children
-  //drawChildLeft(center1,center2,temp,count);
-  //drawChildRight(center1,center2,temp,count);
-  
-  //drawing rest 3:
-  //drawChild1(center1,center2,temp,count);
-  //drawChild2(center1,center2,temp,count);
-  //drawChild3(center1,center2,temp,count);
-  
-  //stroke(255,238,3);
-  //drawChildTriangle(temp,count);
-  time++;
 }
 
 void drawChildTriangle(point3 temp, int count){
@@ -84,136 +75,6 @@ void drawChildTriangle(point3 temp, int count){
     int t=count;
     count--;
     drawChildTriangle(newPoints, count);
-    count = t;
-    
-  }
-}
-void drawChildHept(point7 temp, int count){
-  if(count == 0) return;
-  for(int i=0;i<7;i++){
-    
-    point7 newPoints = new point7();
-    PVector tran = new PVector();
-    PVector center = center(temp.x[i%7],temp.y[i%7],temp.x[(i+6)%7],temp.y[(i+6)%7]);
-     // 3' <-- 0
-    newPoints.x[(i+3)%7] = temp.x[(i)%7];
-    newPoints.y[(i+3)%7] = temp.y[(i)%7];
-    
-    // 4' <-- 6
-    newPoints.x[(i+4)%7] = temp.x[(i+6)%7];
-    newPoints.y[(i+4)%7] = temp.y[(i+6)%7];
-        
-    // 2' <-- inv(1)
-    tran = inverse(center, temp.x[(i+1)%7], temp.y[(i+1)%7], center.z);
-    newPoints.x[(i+2)%7] = tran.x;
-    newPoints.y[(i+2)%7] = tran.y;
-    
-    // 1' <-- inv(2)
-    tran = inverse(center, temp.x[(i+2)%7], temp.y[(i+2)%7], center.z);
-    newPoints.x[(i+1)%7] = tran.x;
-    newPoints.y[(i+1)%7] = tran.y;
-
-    // 0' <-- inv(3)
-    tran = inverse(center, temp.x[(i+3)%7], temp.y[(i+3)%7], center.z);
-    newPoints.x[(i)%7] = tran.x;
-    newPoints.y[(i)%7] = tran.y;
-
-    // 6' <-- inv(4)
-    tran = inverse(center, temp.x[(i+4)%7], temp.y[(i+4)%7], center.z);
-    newPoints.x[(i+6)%7] = tran.x;
-    newPoints.y[(i+6)%7] = tran.y;
-
-    // 5' <-- inv(5)
-    tran = inverse(center, temp.x[(i+5)%7], temp.y[(i+5)%7], center.z);
-    newPoints.x[(i+5)%7] = tran.x;
-    newPoints.y[(i+5)%7] = tran.y;
-    
-    
-    Heptagon hept = new Heptagon(newPoints.x,newPoints.y);
-    hept.draw();
-   
-    //count=1;
-    int t=count;
-    count--;
-    drawChildHept(newPoints, count);
-    count = t;
-  }
-  
-}
-
-void drawChildPent(point5 temp, int count){
-  if(count == 0) return;
-  for(int i=0;i<5;i++){
-    point5 newPoints = new point5();
-    PVector tran = new PVector();
-    PVector center = center(temp.x[i],temp.y[i],temp.x[(i+4)%5],temp.y[(i+4)%5]);
-     // 1' <-- 0
-    newPoints.x[(i+1)%5] = temp.x[(i)%5];
-    newPoints.y[(i+1)%5] = temp.y[(i)%5];
-    
-    // 2' <-- 4
-    newPoints.x[(i+2)%5] = temp.x[(i+4)%5];
-    newPoints.y[(i+2)%5] = temp.y[(i+4)%5];
-        
-    // 4' <-- inv(2)
-    tran = inverse(center, temp.x[(i+2)%5], temp.y[(i+2)%5], center.z);
-    newPoints.x[(i+4)%5] = tran.x;
-    newPoints.y[(i+4)%5] = tran.y;
-    
-    // 1' <-- inv(1)
-    tran = inverse(center, temp.x[(i+1)%5], temp.y[(i+1)%5], center.z);
-    newPoints.x[(i)%5] = tran.x;
-    newPoints.y[(i)%5] = tran.y;
-
-    // 3' <-- inv(3)
-    tran = inverse(center, temp.x[(i+3)%5], temp.y[(i+3)%5], center.z);
-    newPoints.x[(i+3)%5] = tran.x;
-    newPoints.y[(i+3)%5] = tran.y;
-    
-    
-    Pentagon pent = new Pentagon(newPoints.x,newPoints.y);
-    pent.draw();
-   
-    //count=1;
-    int t=count;
-    count--;
-    drawChildPent(newPoints, count);
-    count = t;
-  }
-}
-void drawChildSquare(point4 temp, int count){
-  
-  if(count == 0) return;
-  for(int i=0;i<4;i++){
-    point4 newPoints = new point4();
-    PVector tran = new PVector();
-    PVector center = center(temp.x[i],temp.y[i],temp.x[(i+1)%4],temp.y[(i+1)%4]);
-    // 3' <-- 0
-    newPoints.x[(i+3)%4] = temp.x[(i)%4];
-    newPoints.y[(i+3)%4] = temp.y[(i)%4];
-    
-    // 2' <-- 1
-    newPoints.x[(i+2)%4] = temp.x[(i+1)%4];
-    newPoints.y[(i+2)%4] = temp.y[(i+1)%4];
-        
-    // 0' <-- inv(3)
-    tran = inverse(center, temp.x[(i+3)%4], temp.y[(i+3)%4], center.z);
-    newPoints.x[(i)%4] = tran.x;
-    newPoints.y[(i)%4] = tran.y;
-    
-    // 1' <-- inv(2)
-    tran = inverse(center, temp.x[(i+2)%4], temp.y[(i+2)%4], center.z);
-    newPoints.x[(i+1)%4] = tran.x;
-    newPoints.y[(i+1)%4] = tran.y;
-    
-    
-    square sq = new square(newPoints.x,newPoints.y);
-    sq.draw();
-   
-    //count=1;
-    int t=count;
-    count--;
-    drawChildSquare(newPoints, count);
     count = t;
     
   }
