@@ -42,6 +42,10 @@ class point7{
   public float[] x = new float[7];
   public float[] y = new float[7];
 }
+class point3{
+  public float[] x = new float[3];
+  public float[] y = new float[3];
+}
 
 
 PVector inverse(PVector center, PVector point, float r){
