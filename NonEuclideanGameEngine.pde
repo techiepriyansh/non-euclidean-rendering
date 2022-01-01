@@ -1,6 +1,10 @@
+import java.util.Map;
+
 int count = 5;
 float time = 0;
-float weight = 0.01;
+float weight = 0.00;
+HashMap<Float, Float> mapX = new HashMap<Float, Float>();
+HashMap<Float, Float> mapY = new HashMap<Float, Float>();
 
 PointObject pobj1;
 PointObject pobj2;
@@ -50,6 +54,13 @@ void draw() {
 void drawChildTriangle(point3 temp, int count){
   
   if(count == 0) return;
+  if(mapX.containsValue(temp.x[0]) && mapX.containsValue(temp.x[1]) && mapX.containsValue(temp.x[2])){
+    print("Working");
+    if(mapY.containsValue(temp.y[0]) && mapY.containsValue(temp.y[1]) && mapY.containsValue(temp.y[2])){
+      print("working");
+      return;
+    }
+  }
   for(int i=0;i<3;i++){
     point3 newPoints = new point3();
     PVector tran = new PVector();
@@ -74,6 +85,10 @@ void drawChildTriangle(point3 temp, int count){
     //count=1;
     int t=count;
     count--;
+    for(int k=0;k<3;k++){
+      mapX.put(newPoints.x[k],1.0);
+      mapY.put(newPoints.y[k],1.0);
+    }
     drawChildTriangle(newPoints, count);
     count = t;
     
