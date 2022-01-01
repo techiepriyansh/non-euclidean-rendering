@@ -87,3 +87,58 @@ class Pentagon{
     }
   }
 };
+
+
+class Heptagon{
+  float[] x = new float[7];
+  float[] y = new float[7];
+  float scale;
+  Heptagon(){
+    scale=0.5;
+    for(int i=0;i<5;i++){
+      x[i] = scale * cos(2 * i * PI / 7 + PI /2);
+      y[i] = scale * sin(2 * i * PI / 7 + PI/ 2);
+    }
+  }
+  
+  Heptagon(float[] a,float[] b){
+    for(int i=0;i<7;i++){
+      x[i]=a[i];
+    }
+    for(int i=0;i<7;i++){
+      y[i]=b[i];
+    }
+  }
+  public void draw(){
+    for(int i=0;i<7;i++){
+        lineH(x[i],y[i],x[(i+1)%7],y[(i+1)%7]);
+    }
+  }
+};
+
+class Triangle{
+  float[] x = new float[3];
+  float[] y = new float[3];
+  float scale;
+  Triangle(){
+    scale=0.5;
+    for(int i=0;i<3;i++){
+      x[i] = scale * cos(2 * i * PI / 3 + PI /2);
+      y[i] = scale * sin(2 * i * PI / 3 + PI/ 2);
+    }
+  }
+  
+  Triangle(float[] a,float[] b){
+    for(int i=0;i<3;i++){
+      x[i]=a[i];
+    }
+    for(int i=0;i<3;i++){
+      y[i]=b[i];
+    }
+  }
+  public void draw(){
+    for(int i=0;i<3;i++){
+        lineH(x[i],y[i],x[(i+1)%3],y[(i+1)%3]);
+    }
+  }
+};
