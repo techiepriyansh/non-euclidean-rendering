@@ -1,4 +1,5 @@
 void lineH(float u1, float u2, float v1, float v2) {
+
   HyperbolicGeodesicArc hgArc = getGeodesicSegmentThrough(u1, u2, v1, v2);
 
   strokeWeight(2);
@@ -128,7 +129,7 @@ class Triangle{
     }
   }
   
-  Triangle(float[] a,float[] b){
+  Triangle(Float[] a,Float[] b){
     for(int i=0;i<3;i++){
       x[i]=a[i];
     }

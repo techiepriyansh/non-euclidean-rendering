@@ -5,6 +5,10 @@ void mCircle(float cx, float cy, float r) {
   circle(cx*SCALING_FACTOR, cy*SCALING_FACTOR, 2*r*SCALING_FACTOR);
 }
 
+void mLine(float u1, float u2, float v1,float v2) {
+  line(u1*SCALING_FACTOR, u2*SCALING_FACTOR, v1*SCALING_FACTOR, v2*SCALING_FACTOR);
+}
+
 void mArc(float cx, float cy, float r, float angle1, float angle2) {
   noFill();
   
@@ -43,8 +47,8 @@ class point7{
   public float[] y = new float[7];
 }
 class point3{
-  public float[] x = new float[3];
-  public float[] y = new float[3];
+  public Float[] x = new Float[3];
+  public Float[] y = new Float[3];
 }
 
 

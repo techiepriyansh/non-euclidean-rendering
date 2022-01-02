@@ -1,8 +1,10 @@
 import java.util.Map;
 
-int count = 5;
+int count = 6;
 float time = 0;
-float weight = 0.00;
+float weight = 0.0;
+float epsilon = 0.001;
+float prescision = 100000;
 HashMap<Float, Float> mapX = new HashMap<Float, Float>();
 HashMap<Float, Float> mapY = new HashMap<Float, Float>();
 
@@ -13,12 +15,9 @@ void setup() {
   size(800, 800);
   background(134, 166, 164);
   frameRate(60);
-}
-
-void draw() {
-   
-  pobj1 = new PointObject(new PVector(0.01, 0.5), new PVector(1, 1));
-  pobj2 = new PointObject(new PVector(0.01, 0.1), new PVector(1, 1));
+  pixelDensity(1);
+  
+  
   // move origin to center
   translate(width/2, height/2);
   scale(1, -1);
@@ -40,7 +39,7 @@ void draw() {
       points.x[i] = scale * cos(2*(i+j) * PI / 7 + PI/2 + time*weight);
       points.y[i] = scale * sin(2*(i+j) * PI / 7 + PI/2 + time*weight);
     }
-    points.x[2]=0.001;points.y[2]=0.001;
+    points.x[2]=epsilon;points.y[2]=epsilon;
     stroke(255,238,3);
     point3 temp = points;
     Triangle tri= new Triangle(points.x,points.y);
@@ -49,17 +48,60 @@ void draw() {
     drawChildTriangle(temp,count);
     time++;
   }
+  
+}
+
+void draw() {
+  // // move origin to center
+  //translate(width/2, height/2);
+  //scale(1, -1);
+
+  //// unit circle
+  //fill(0);
+  //stroke(0);
+  //mCircle(0, 0, 1);
+
+  //// axes
+  //line(0, height/2, 0, -height/2);
+  //line(width/2, 0, -width/2, 0);
+  
+  
+  //float scale = 0.5;
+  //for(int j=0;j<7;j++){
+  //  point3 points = new point3();
+  //  for(int i=0;i<2;i++){
+  //    points.x[i] = scale * cos(2*(i+j) * PI / 7 + PI/2 + time*weight);
+  //    points.y[i] = scale * sin(2*(i+j) * PI / 7 + PI/2 + time*weight);
+  //  }
+  //  points.x[2]=epsilon;points.y[2]=epsilon;
+  //  stroke(255,238,3);
+  //  point3 temp = points;
+  //  Triangle tri= new Triangle(points.x,points.y);
+  //  tri.draw();
+
+  //  drawChildTriangle(temp,count);
+  //  time++;
+  //}
+  //mapX.clear();
+  //mapY.clear();
+  
 }
 
 void drawChildTriangle(point3 temp, int count){
   
   if(count == 0) return;
-  if(mapX.containsValue(temp.x[0]) && mapX.containsValue(temp.x[1]) && mapX.containsValue(temp.x[2])){
-    print("Working");
-    if(mapY.containsValue(temp.y[0]) && mapY.containsValue(temp.y[1]) && mapY.containsValue(temp.y[2])){
-      print("working");
-      return;
-    }
+  boolean flag = true;
+  for(int i=0;i<3;i++){
+    //print(mapX.containsValue(Math.round( temp.x[i]* prescision) / prescision));
+    flag&=mapX.containsKey(Math.round( temp.x[i]* prescision) / prescision);
+    flag&=mapY.containsKey(Math.round( temp.y[i]* prescision) / prescision);
+    
+    //flag &= mapX.containsKey(temp.x[i]);
+    //flag &= mapX.containsKey(temp.y[i]);
+  }
+  if(flag){
+    print("working");
+    return;
   }
   for(int i=0;i<3;i++){
     point3 newPoints = new point3();
@@ -86,9 +128,14 @@ void drawChildTriangle(point3 temp, int count){
     int t=count;
     count--;
     for(int k=0;k<3;k++){
-      mapX.put(newPoints.x[k],1.0);
-      mapY.put(newPoints.y[k],1.0);
+      float value1 = Math.round( temp.x[k]* prescision) / prescision;
+      float value2 = Math.round( temp.y[k]* prescision) / prescision;
+      
+      //print(value1+ " " +value2+ "    ");
+      mapX.put(value1,1.0);
+      mapY.put(value2,1.0);
     }
+    print("\n");
     drawChildTriangle(newPoints, count);
     count = t;
     
