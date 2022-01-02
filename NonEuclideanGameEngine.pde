@@ -1,10 +1,11 @@
 import java.util.Map;
 
 int count = 6;
+int triangleCount;
 float time = 0;
 float weight = 0.0;
 float epsilon = 0.001;
-float prescision = 100000;
+float prescision = 10000;
 HashMap<Float, Float> mapX = new HashMap<Float, Float>();
 HashMap<Float, Float> mapY = new HashMap<Float, Float>();
 
@@ -48,6 +49,7 @@ void setup() {
     drawChildTriangle(temp,count);
     time++;
   }
+  print(triangleCount);
   
 }
 
@@ -100,7 +102,7 @@ void drawChildTriangle(point3 temp, int count){
     //flag &= mapX.containsKey(temp.y[i]);
   }
   if(flag){
-    print("working");
+    //print("working");
     return;
   }
   for(int i=0;i<3;i++){
@@ -120,6 +122,7 @@ void drawChildTriangle(point3 temp, int count){
     newPoints.x[(i+2)%3] = tran.x;
     newPoints.y[(i+2)%3] = tran.y;
     
+    triangleCount++;
     
     Triangle tri = new Triangle(newPoints.x,newPoints.y);
     tri.draw();
